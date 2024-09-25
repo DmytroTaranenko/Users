@@ -1,0 +1,37 @@
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header {
+  background: #fff;
+  border-bottom: 1px solid #000;
+  height: 88px;
+  margin: 0 auto;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.link {
+  display: block;
+  text-align: center;
+  font-family: var(--font-family);
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 143%;
+  letter-spacing: 0.01em;
+  color: #000;
+  border: 1px solid #c4c4c4;
+  padding: 14px 112px;
+
+}
+
+.link:not(:last-child) {
+  margin-right: 20px;
+}
+
+.active {
+  background: #c4c4c4;
+  opacity: 0.32;
+}

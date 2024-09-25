@@ -1,0 +1,26 @@
+.container {
+  margin: 0 auto;
+  width: 1440px;
+  height: 928px;
+  padding: 80px 100px;
+}
+
+.editUsersBox {
+  border: 1px solid #000;
+  padding: 60px 80px 80px 80px;
+  width: 1240px;
+  height: 768px;
+  max-width: 1400px;
+  background: #ffffff;
+}
+
+.titleEditUsers {
+  margin-top: 60px;
+  text-align: center;
+  font-family: var(--second-family);
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 133%;
+  letter-spacing: 0.25em;
+  color: #000;
+}
