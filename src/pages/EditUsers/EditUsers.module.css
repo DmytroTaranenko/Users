@@ -5,9 +5,18 @@
   padding: 80px 100px;
 }
 
-.editUsersBox {
+/* .editUsersBox {
   border: 1px solid #000;
   padding: 60px 80px 80px 80px;
+  width: 1240px;
+  height: 768px;
+  max-width: 1400px;
+  background: #ffffff;
+} */
+
+.form {
+  border: 1px solid #000;
+  padding: 80px 100px;
   width: 1240px;
   height: 768px;
   max-width: 1400px;
@@ -15,7 +24,7 @@
 }
 
 .titleEditUsers {
-  margin-top: 60px;
+  margin-bottom: 80px;
   text-align: center;
   font-family: var(--second-family);
   font-weight: 500;
@@ -23,4 +32,90 @@
   line-height: 133%;
   letter-spacing: 0.25em;
   color: #000;
+}
+
+.span {
+  display: inline-block;
+  margin-bottom: 4px;
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 143%;
+  letter-spacing: 0.01em;
+  color: #5e626b;
+}
+
+.userInput {
+  display: block;
+  background: #ffffff;
+  border: 1px solid #e3e8ee;
+  padding: 8px 12px 8px 24px;
+  width: 500px;
+  height: 48px;
+}
+
+.userInformationTitle {
+  margin-top: 60px;
+  margin-bottom: 40px;
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 160%;
+  letter-spacing: 0.01em;
+  color: #000;
+}
+
+.selectField {
+  display: block;
+  border: 1px solid #e3e8ee;
+  padding: 8px 12px 8px 24px;
+  width: 500px;
+  height: 48px;
+  background: #ffffff;
+}
+
+.undoBtn {
+  font-family: var(--font-family);
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 143%;
+  letter-spacing: 0.01em;
+  color: #000;
+  border: 1px solid #c4c4c4;
+  padding: 14px 33px;
+  width: 100px;
+  height: 48px;
+  margin-right: 20px;
+  background-color: #ffffff;
+
+}
+
+.saveBtn {
+  font-family: var(--font-family);
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 143%;
+  letter-spacing: 0.01em;
+  color: #000;
+
+  border: 1px solid #c4c4c4;
+  padding: 14px 84px;
+  width: 200px;
+  height: 48px;
+  background-color: #ffffff;
+}
+
+
+.formGroup {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+.formGroup:last-child {
+  margin-bottom: 80px;
+}
+
+.wrapBtn {
+  display: flex;
+  justify-content: flex-end;
 }
