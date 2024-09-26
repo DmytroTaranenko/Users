@@ -48,3 +48,30 @@ export default tseslint.config({
   },
 })
 ```
+
+
+    const filteredData = data.filter((item) => {
+        if (selectedDepartment !== null && selectedCountry !== null && selectedStatus !== null)
+            return (
+                item.departament === selectedDepartment.value &&
+                item.country === selectedCountry.value &&
+                item.status === selectedStatus.value
+            )
+
+        if (selectedDepartment !== null && selectedCountry !== null)
+            return item.departament === selectedDepartment.value && item.country === selectedCountry.value
+
+        if (selectedDepartment !== null && selectedStatus !== null)
+            return item.departament === selectedDepartment.value && item.status === selectedStatus.value
+
+        if (selectedCountry !== null && selectedStatus !== null)
+            return item.country === selectedCountry.value && item.status === selectedStatus.value
+
+        if (selectedDepartment !== null) return item.departament === selectedDepartment.value
+
+        if (selectedCountry !== null) return item.country === selectedCountry.value
+
+        if (selectedStatus !== null) return item.status === selectedStatus.value
+
+        return true
+    })

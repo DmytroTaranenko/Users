@@ -7,6 +7,8 @@ const INITIAL_VALUES = {};
 const ProfileValidationSchema = Yup.object().shape({});
 
 const EditUsers = () => {
+
+
   const handleChange = () => {};
 
   return (
@@ -51,7 +53,7 @@ const EditUsers = () => {
                   name="department"
                   onChange={handleChange}
                 >
-                  <option value="Select departament">Select departament</option>
+                  <option  value="disabled">Select departament</option>
                   <option value="Digital Marketing">Digital Marketing</option>
                   <option value="Sales">Sales</option>
                   <option value="Development">Development</option>
