@@ -132,9 +132,9 @@
     margin-top: 60px;
 }
 
-.selectField {
-    border: 1px solid #e3e8ee;
-    padding: 8px 12px 8px 24px;
-    width: 220px;
-    height: 48px;
+.reactSelect{
+  border: 1px solid #e3e8ee;
+  padding: 8px 12px 8px 24px;
+  width: 220px;
+  height: 48px;
 }

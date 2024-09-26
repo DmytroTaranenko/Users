@@ -1,20 +1,25 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import css from './Users.module.css'
 import DeleteIcon from '../../assets/images/deleteIcon.svg?react'
-
+import * as Yup from 'yup'
 // import DeleteIcon from "@mui/icons-material/Delete";
 import Select from 'react-select'
-
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from '@mui/material'
-
-import { TableVirtuoso, Virtuoso } from 'react-virtuoso'
-
+import { IconButton } from '@mui/material'
+import { TableVirtuoso } from 'react-virtuoso'
 import Modal from 'react-modal'
 import { Field, Form, Formik } from 'formik'
 
 type Option = {
     value: string
     label: string
+}
+
+type Contact ={
+  id: number
+  fullName: string
+  departament: string
+  country: string
+  status: string
 }
 
 const departamentOptions = [
@@ -74,17 +79,36 @@ const customStyles = {
 
 Modal.setAppElement('#root')
 
-const INITIAL_VALUES = {}
+const INITIAL_VALUES = {
+    fullName: '',
+    departament: '',
+    country: '',
+    status: '',
+}
 
-const ProfileValidationSchema = {}
+const ProfileValidationSchema = Yup.object().shape({
+    fullName: Yup.string().required('Full Name is required'),
+    departament: Yup.string().required('Departament is required'),
+    country: Yup.string().required('Country is required'),
+    status: Yup.string().required('Status is required'),
+})
 
 const Users = () => {
+
+
     const [selectedDepartment, setSelectedDepartment] = useState<Option | null>(null)
     const [selectedCountry, setSelectedCountry] = useState<Option | null>(null)
     const [selectedStatus, setSelectedStatus] = useState<Option | null>(null)
-
     const [modalIsOpen, setIsOpen] = useState(false)
-    const [data, setData] = useState(INITIAL_DATA)
+    const [data, setData] = useState<Contact[]>(() => {
+      const storedData = localStorage.getItem("UserData");
+      return storedData ? JSON.parse(storedData) : INITIAL_DATA;
+  });
+
+
+  useEffect(() => {
+    localStorage.setItem("UserData", JSON.stringify(data));
+  }, [data]);
 
     const handleDelete = (id: number) => {
         setData(data.filter((item) => item.id !== id))
@@ -99,24 +123,24 @@ const Users = () => {
     }
 
     const handleReset = () => {
-      setSelectedDepartment(null)
-      setSelectedCountry(null)
-      setSelectedStatus(null)
+        setSelectedDepartment(null)
+        setSelectedCountry(null)
+        setSelectedStatus(null)
     }
 
     const filteredDataByDepartment = data.filter((item) => {
-        if (selectedDepartment === null) return true;
+        if (selectedDepartment === null) return true
         return item.departament === selectedDepartment.value
     })
 
     const filteredDataByDepartmentAndCountry = filteredDataByDepartment.filter((item) => {
-      if(selectedCountry === null) return true;
-      return item.country === selectedCountry.value
+        if (selectedCountry === null) return true
+        return item.country === selectedCountry.value
     })
 
     const filteredDataByDepartmentAndCountryAndStatus = filteredDataByDepartmentAndCountry.filter((item) => {
-      if(selectedStatus === null) return true;
-      return item.status === selectedStatus.value
+        if (selectedStatus === null) return true
+        return item.status === selectedStatus.value
     })
 
     return (
@@ -126,12 +150,13 @@ const Users = () => {
                 <p className={css.paragraph}>Please add at least 3 departmetns to be able to proceed next steps.</p>
                 <div className={css.wrapper}>
                     <ul className={css.selectList}>
-                        <li>
+                        <li className={css.selectItem}>
                             <Select
                                 onChange={(option) => setSelectedDepartment(option)}
                                 value={selectedDepartment}
                                 options={departamentOptions}
-                                className={css.select}
+                                className="react-select-container"
+                                classNamePrefix={css.reactSelect}
                             />
                         </li>
                         <li>
@@ -139,8 +164,8 @@ const Users = () => {
                                 onChange={(option) => setSelectedCountry(option)}
                                 value={selectedCountry}
                                 options={countryOptions}
-                                className={css.select}
-
+                                className="react-select-container"
+                                classNamePrefix="react-select"
                             />
                         </li>
                         <li>
@@ -148,8 +173,8 @@ const Users = () => {
                                 onChange={(option) => setSelectedStatus(option)}
                                 value={selectedStatus}
                                 options={statusOptions}
-                                className={css.selectField}
-
+                                className="react-select-container"
+                                classNamePrefix="react-select"
                             />
                         </li>
                         <li>
@@ -186,7 +211,7 @@ const Users = () => {
                         <tr>
                             <th>ID</th>
                             <th>Full Name</th>
-                            <th>Departament</th>
+                            <th>departament</th>
                             <th>Country</th>
                             <th>Status</th>
                         </tr>
@@ -198,7 +223,24 @@ const Users = () => {
                 <h2 className={css.addUserTitle}>ADD USER</h2>
                 <Formik
                     initialValues={INITIAL_VALUES}
-                    onSubmit={(values, actions) => {}}
+                    onSubmit={(values, actions) => {
+                      const newUser: Contact = {
+                          id: data.length + 1,
+                          fullName: values.fullName,
+                          departament: values.departament,
+                          country: values.country,
+                          status: values.status,
+                      }
+
+                      setData((prevData) => {
+                        const updatedData = [...prevData, newUser];
+                        localStorage.setItem("UserData", JSON.stringify(updatedData)); // Зберегти оновлені дані
+                        return updatedData;
+                    });
+
+                      actions.resetForm()
+                      closeModal()
+                  }}
                     validationSchema={ProfileValidationSchema}
                 >
                     <Form>
@@ -214,32 +256,32 @@ const Users = () => {
                             </label>
                             <label>
                                 <span className={css.span}>Departament</span>
-                                <select className={css.selectField} name="depatrament">
+                                <Field as="select" className={css.selectField} name="departament">
                                     <option value="Select departament">Select departament</option>
                                     <option value="Digital Marketing">Digital Marketing</option>
                                     <option value="Sales">Sales</option>
                                     <option value="Development">Development</option>
-                                </select>
+                                </Field>
                             </label>
                         </div>
 
                         <div className={css.formGroup}>
                             <label>
                                 <span className={css.span}>Country</span>
-                                <select className={css.selectField} name="country">
+                                <Field as="select" className={css.selectField} name="country">
                                     <option value="Select country">Select country</option>
                                     <option value="United States">United States</option>
                                     <option value="Ukraine">Ukraine</option>
                                     <option value="Poland">Poland</option>
-                                </select>
+                                </Field>
                             </label>
                             <label>
                                 <span className={css.span}>Status</span>
-                                <select className={css.selectField} name="status">
+                                <Field as="select" className={css.selectField} name="status">
                                     <option value="Select active">Select active</option>
                                     <option value="Active">Active</option>
                                     <option value="Inactive">Inactive</option>
-                                </select>
+                                </Field>
                             </label>
                         </div>
 
