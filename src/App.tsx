@@ -15,7 +15,7 @@ function App() {
           <Routes>
             <Route path="/users" element={<Users />} />
             <Route path="/editUsers" element={<EditUsers />} />
-          </Routes>
+          </Routes> 
         </Suspense>
       </Layout>
     </>

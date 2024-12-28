@@ -1,0 +1,52 @@
+.overlay {
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    inset: 0;
+}
+
+.cancelBtn {
+    border: 1px solid #c4c4c4;
+    padding: 14px 28px;
+    width: 100px;
+    height: 48px;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 143%;
+    letter-spacing: 0.01em;
+    color: #000;
+    margin-right: 20px;
+    opacity: 0.4;
+    background: #fff;
+}
+.addBtn {
+    border: 1px solid #c4c4c4;
+    padding: 14px 62px;
+    width: 150px;
+    height: 48px;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 143%;
+    letter-spacing: 0.01em;
+    color: #000;
+    background: #fff;
+}
+
+.wrapBtn{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 60px;
+}
+
+.label{
+    display: flex;
+    flex-direction:column ;
+    gap: 12px;
+}
+
+.formGroup{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    
+}

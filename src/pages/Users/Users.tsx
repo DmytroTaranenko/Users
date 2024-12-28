@@ -1,41 +1,17 @@
 import { useEffect, useState } from 'react'
 import css from './Users.module.css'
 import DeleteIcon from '../../assets/images/deleteIcon.svg?react'
-import * as Yup from 'yup'
 // import DeleteIcon from "@mui/icons-material/Delete";
 import Select from 'react-select'
 import { IconButton } from '@mui/material'
 import { TableVirtuoso } from 'react-virtuoso'
 import Modal from 'react-modal'
-import { Field, Form, Formik } from 'formik'
-
-type Option = {
-    value: string
-    label: string
-}
-
-type Contact ={
-  id: number
-  fullName: string
-  departament: string
-  country: string
-  status: string
-}
-
-const departamentOptions = [
-    { value: 'Digital Marketing', label: 'Digital Marketing' },
-    { value: 'Sales', label: 'Sales' },
-    { value: 'Development', label: 'Development' },
-]
-const countryOptions = [
-    { value: 'United States', label: 'United States' },
-    { value: 'Ukraine', label: 'Ukraine' },
-    { value: 'Poland', label: 'Poland' },
-]
-const statusOptions = [
-    { value: 'Active', label: 'Active' },
-    { value: 'Inactive', label: 'Inactive' },
-]
+import { User } from '../../types/user'
+import AddUserModal from '../../components/AddUserModal/AddUserModal'
+import { useSearchParams } from 'react-router-dom'
+import { countryOptions, departamentOptions, statusOptions } from '../../utils/options'
+import { useDispatch, useSelector } from 'react-redux'
+import { addUser, deleteUser } from '../../redux/Users/usersReducer'
 
 const INITIAL_DATA = [
     {
@@ -62,86 +38,121 @@ const INITIAL_DATA = [
     // Більше даних...
 ]
 
-const customStyles = {
-    content: {
-        width: '720px',
-        height: '444px',
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        border: '1px solid #000',
-        padding: '40px 60px',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)',
-    },
-}
-
 Modal.setAppElement('#root')
 
-const INITIAL_VALUES = {
-    fullName: '',
-    departament: '',
-    country: '',
-    status: '',
-}
-
-const ProfileValidationSchema = Yup.object().shape({
-    fullName: Yup.string().required('Full Name is required'),
-    departament: Yup.string().required('Departament is required'),
-    country: Yup.string().required('Country is required'),
-    status: Yup.string().required('Status is required'),
-})
-
 const Users = () => {
+    const [modalIsOpen, setModalIsOpen] = useState(false)
+    // const [selectedDepartment, setSelectedDepartment] = useState<Option | null>(null)
+    // const [selectedCountry, setSelectedCountry] = useState<Option | null>(null)
+    // const [selectedStatus, setSelectedStatus] = useState<Option | null>(null)
+    // const [data, setData] = useState<Contact[]>(() => {
+    //     const storedData = localStorage.getItem('UserData')
+    //     return storedData ? JSON.parse(storedData) : INITIAL_DATA
+    // })
 
+    const dispatch = useDispatch()
+    const users = useSelector((state: any) => state.users.users)
 
-    const [selectedDepartment, setSelectedDepartment] = useState<Option | null>(null)
-    const [selectedCountry, setSelectedCountry] = useState<Option | null>(null)
-    const [selectedStatus, setSelectedStatus] = useState<Option | null>(null)
-    const [modalIsOpen, setIsOpen] = useState(false)
-    const [data, setData] = useState<Contact[]>(() => {
-      const storedData = localStorage.getItem("UserData");
-      return storedData ? JSON.parse(storedData) : INITIAL_DATA;
-  });
+    const [params, setParams] = useSearchParams()
 
+    const selectedDepartment = params.get('selectedDepartment') ?? null
+    const selectedCountry = params.get('selectedCountry') ?? null
+    const selectedStatus = params.get('selectedStatus') ?? null
 
-  useEffect(() => {
-    localStorage.setItem("UserData", JSON.stringify(data));
-  }, [data]);
+    // useEffect(() => {
+    //     localStorage.setItem('UserData', JSON.stringify(data))
+    // }, [])
 
-    const handleDelete = (id: number) => {
-        setData(data.filter((item) => item.id !== id))
+    const onAddUserModalOpen = () => {
+        setModalIsOpen(true)
     }
 
-    function openModal() {
-        setIsOpen(true)
+    const onAddUserModalClose = () => {
+        setModalIsOpen(false)
     }
 
-    function closeModal() {
-        setIsOpen(false)
+    const onAddUser = (newUser: any) => {
+        dispatch(addUser(newUser))
     }
 
-    const handleReset = () => {
-        setSelectedDepartment(null)
-        setSelectedCountry(null)
-        setSelectedStatus(null)
+    const onDeleteUser = (id: any) => {
+        dispatch(deleteUser(id))
     }
 
-    const filteredDataByDepartment = data.filter((item) => {
+    const onReset = () => {
+        setParams({})
+    }
+
+    const filteredDataByDepartment = users.filter((item: any) => {
         if (selectedDepartment === null) return true
-        return item.departament === selectedDepartment.value
+        return item.departament === selectedDepartment
     })
 
-    const filteredDataByDepartmentAndCountry = filteredDataByDepartment.filter((item) => {
+    const filteredDataByDepartmentAndCountry = filteredDataByDepartment.filter((item: any) => {
         if (selectedCountry === null) return true
-        return item.country === selectedCountry.value
+        return item.country === selectedCountry
     })
 
-    const filteredDataByDepartmentAndCountryAndStatus = filteredDataByDepartmentAndCountry.filter((item) => {
+    const filteredDataByDepartmentAndCountryAndStatus = filteredDataByDepartmentAndCountry.filter((item: any) => {
         if (selectedStatus === null) return true
-        return item.status === selectedStatus.value
+        return item.status === selectedStatus
     })
+
+    const selectStyles = {
+        control: (base: any) => ({
+            ...base,
+            border: '1px solid transpa',
+            minWidth: '210px',
+            height: '28px',
+            boxShadow: 'none',
+            borderRadius: '8px',
+            backgroundColor: '#f0f1f7',
+            transition: 'all .3s',
+            '&:hover': {
+                border: '1px solid #8e90a7',
+            },
+            '&:focus': {
+                backgroundColor: 'transparent',
+            },
+        }),
+        placeholder: (base: any) => ({
+            ...base,
+            color: '#333',
+            fontSize: 14,
+            paddingLeft: 15,
+        }),
+        singleValue: (base: any) => ({
+            ...base,
+            color: '#15171a',
+            fontSize: 14,
+            paddingLeft: 15,
+            fontWeight: 600,
+        }),
+        indicatorSeparator: (base: any) => ({
+            ...base,
+            display: 'none',
+        }),
+        option: (base: any, { isSelected }: any) => ({
+            ...base,
+            fontWeight: 500,
+            color: isSelected ? '#f44242' : '#15171a',
+            backgroundColor: isSelected ? 'transparent' : 'transparent',
+        }),
+        menu: (base: any) => ({
+            ...base,
+            // boxShadow: '0 4px 80px 0 rgba(53, 56, 64, 0.25)',
+            borderRadius: '0 16px 16px 16px',
+            border: 'none',
+            zIndex: 10,
+        }),
+        input: (base: any) => ({
+            ...base,
+            color: '#15171a',
+            // paddingLeft: 15,
+            fontSize: 14,
+            paddingLeft: 15,
+        }),
+    }
 
     return (
         <div className={css.container}>
@@ -152,56 +163,88 @@ const Users = () => {
                     <ul className={css.selectList}>
                         <li className={css.selectItem}>
                             <Select
-                                onChange={(option) => setSelectedDepartment(option)}
-                                value={selectedDepartment}
+                                onChange={(option) =>
+                                    setParams((prevParams) => {
+                                        const newParams = new URLSearchParams(prevParams) // Створюємо новий екземпляр
+                                        newParams.set('selectedDepartment', option?.value || '') // Оновлюємо параметр
+                                        return newParams
+                                    })
+                                }
+                                value={
+                                    selectedDepartment ? { value: selectedDepartment, label: selectedDepartment } : null
+                                }
                                 options={departamentOptions}
                                 className="react-select-container"
                                 classNamePrefix={css.reactSelect}
+                                styles={selectStyles}
+                                placeholder="Select departments"
                             />
                         </li>
                         <li>
                             <Select
-                                onChange={(option) => setSelectedCountry(option)}
-                                value={selectedCountry}
+                                onChange={(option) =>
+                                    setParams((prevParams) => {
+                                        const newParams = new URLSearchParams(prevParams) // Створюємо новий екземпляр
+                                        newParams.set('selectedCountry', option?.value || '') // Оновлюємо параметр
+                                        return newParams
+                                    })
+                                }
+                                value={selectedCountry ? { value: selectedCountry, label: selectedCountry } : null}
                                 options={countryOptions}
                                 className="react-select-container"
                                 classNamePrefix="react-select"
+                                styles={selectStyles}
+                                placeholder="Select country"
                             />
                         </li>
                         <li>
                             <Select
-                                onChange={(option) => setSelectedStatus(option)}
-                                value={selectedStatus}
+                                onChange={(option) =>
+                                    setParams((prevParams) => {
+                                        const newParams = new URLSearchParams(prevParams) // Створюємо новий екземпляр
+                                        newParams.set('selectedStatus', option?.value || '') // Оновлюємо параметр
+                                        return newParams
+                                    })
+                                }
+                                value={selectedStatus ? { value: selectedStatus, label: selectedStatus } : null}
                                 options={statusOptions}
                                 className="react-select-container"
                                 classNamePrefix="react-select"
+                                styles={selectStyles}
+                                placeholder="All status"
                             />
                         </li>
                         <li>
-                            <button onClick={handleReset} className={css.deleteBtn}>
+                            <button onClick={onReset} className={css.deleteBtn}>
                                 <DeleteIcon />
                             </button>
                         </li>
                     </ul>
-                    <button className={css.addUserBtn} type="button" onClick={openModal}>
+                    <button className={css.addUserBtn} type="button" onClick={onAddUserModalOpen}>
                         Add User
                     </button>
+                    <AddUserModal modalIsOpen={modalIsOpen} closeModal={onAddUserModalClose} onSubmit={onAddUser} />
                 </div>
                 <TableVirtuoso
                     data={filteredDataByDepartmentAndCountryAndStatus}
                     components={{
-                        Table: (props) => <table {...props} style={{ borderCollapse: 'collapse', width: '100%' }} />,
+                        Table: (props) => (
+                            <table
+                                {...props}
+                                style={{ borderCollapse: 'collapse', width: '100%', zIndex: '2' }}
+                                className="custom-table"
+                            />
+                        ),
                         TableRow: (props) => <tr {...props} />,
                     }}
-                    itemContent={(index, row) => (
+                    itemContent={(_, row) => (
                         <>
-                            <td>{row.id}</td>
                             <td>{row.fullName}</td>
                             <td>{row.departament}</td>
                             <td>{row.country}</td>
                             <td>{row.status}</td>
                             <td>
-                                <IconButton aria-label="delete" color="error" onClick={() => handleDelete(row.id)}>
+                                <IconButton aria-label="delete" color="error" onClick={() => onDeleteUser(row.id)}>
                                     <DeleteIcon />
                                 </IconButton>
                             </td>
@@ -209,7 +252,6 @@ const Users = () => {
                     )}
                     fixedHeaderContent={() => (
                         <tr>
-                            <th>ID</th>
                             <th>Full Name</th>
                             <th>departament</th>
                             <th>Country</th>
@@ -218,84 +260,6 @@ const Users = () => {
                     )}
                 />
             </div>
-
-            <Modal isOpen={modalIsOpen} onRequestClose={closeModal} style={customStyles}>
-                <h2 className={css.addUserTitle}>ADD USER</h2>
-                <Formik
-                    initialValues={INITIAL_VALUES}
-                    onSubmit={(values, actions) => {
-                      const newUser: Contact = {
-                          id: data.length + 1,
-                          fullName: values.fullName,
-                          departament: values.departament,
-                          country: values.country,
-                          status: values.status,
-                      }
-
-                      setData((prevData) => {
-                        const updatedData = [...prevData, newUser];
-                        localStorage.setItem("UserData", JSON.stringify(updatedData)); // Зберегти оновлені дані
-                        return updatedData;
-                    });
-
-                      actions.resetForm()
-                      closeModal()
-                  }}
-                    validationSchema={ProfileValidationSchema}
-                >
-                    <Form>
-                        <div className={css.formGroup}>
-                            <label>
-                                <span className={css.span}>Full Name</span>
-                                <Field
-                                    className={css.userInput}
-                                    type="text"
-                                    name="fullName"
-                                    placeholder="Enter full name"
-                                />
-                            </label>
-                            <label>
-                                <span className={css.span}>Departament</span>
-                                <Field as="select" className={css.selectField} name="departament">
-                                    <option value="Select departament">Select departament</option>
-                                    <option value="Digital Marketing">Digital Marketing</option>
-                                    <option value="Sales">Sales</option>
-                                    <option value="Development">Development</option>
-                                </Field>
-                            </label>
-                        </div>
-
-                        <div className={css.formGroup}>
-                            <label>
-                                <span className={css.span}>Country</span>
-                                <Field as="select" className={css.selectField} name="country">
-                                    <option value="Select country">Select country</option>
-                                    <option value="United States">United States</option>
-                                    <option value="Ukraine">Ukraine</option>
-                                    <option value="Poland">Poland</option>
-                                </Field>
-                            </label>
-                            <label>
-                                <span className={css.span}>Status</span>
-                                <Field as="select" className={css.selectField} name="status">
-                                    <option value="Select active">Select active</option>
-                                    <option value="Active">Active</option>
-                                    <option value="Inactive">Inactive</option>
-                                </Field>
-                            </label>
-                        </div>
-
-                        <div className={css.wrapBtn}>
-                            <button className={css.cancelBtn} type="button" onClick={closeModal}>
-                                Cancel
-                            </button>
-                            <button className={css.addBtn} type="submit">
-                                Add
-                            </button>
-                        </div>
-                    </Form>
-                </Formik>
-            </Modal>
         </div>
     )
 }
