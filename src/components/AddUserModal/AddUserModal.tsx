@@ -8,6 +8,7 @@ import { createSelectStyles, newStyles } from '../../utils/selectStyles'
 import Select from 'react-select'
 import { SelectOption } from '../../types/shareTypes'
 import { createPortal } from 'react-dom'
+import { useEffect } from 'react'
 
 type Props = {
     modalIsOpen: boolean
@@ -54,7 +55,7 @@ const statusOptions = [
 const customStyles = {
     content: {
         width: '720px',
-        height: '444px',
+        height: '480px',
         top: '50%',
         left: '50%',
         right: 'auto',
@@ -89,6 +90,12 @@ const AddUserModal = ({ modalIsOpen, closeModal, onSubmit }: Props) => {
         },
     })
 
+    useEffect(() => {
+        if (modalIsOpen) {
+            formik.resetForm()
+        }
+    }, [modalIsOpen])
+
     return createPortal(
         <Modal isOpen={modalIsOpen} onRequestClose={closeModal} style={customStyles} overlayClassName={css.overlay}>
             <h2 className={css.addUserTitle}>ADD USER</h2>
@@ -105,14 +112,14 @@ const AddUserModal = ({ modalIsOpen, closeModal, onSubmit }: Props) => {
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                         />
-                        {formik.touched.fullName && formik.errors.fullName ? <p>{formik.errors.fullName}</p> : null}
+                        {formik.touched.fullName && formik.errors.fullName ? <p className={css.fullNameError}>{formik.errors.fullName}</p> : null}
                     </label>
                     <label className={css.label}>
                         <span className={css.span}>Departament</span>
                         <Select
                             options={departamentOptions}
                             name="departament"
-                            styles={newStyles}
+                            styles={createSelectStyles()}
                             value={formik.values.departament}
                             onChange={(option) => formik.setFieldValue('departament', option)}
                             onBlur={formik.handleBlur}

@@ -4,10 +4,9 @@ import * as Yup from 'yup'
 import { countryOptions, departamentOptions, Option, statusOptions } from '../../utils/options'
 import { useState } from 'react'
 import Select from 'react-select'
-import { createSelectStyles } from '../../utils/selectStyles'
-import { useDispatch, useSelector } from 'react-redux'
+import { createSelectStyles, newStyles } from '../../utils/selectStyles'
+import { useDispatch } from 'react-redux'
 import { selectEditingUser } from '../../redux/Users/usersReducer'
-import { User } from '../../types/user'
 import { useAppSelector } from '../../hooks'
 
 const INITIAL_VALUES = {
@@ -24,12 +23,10 @@ const EditUsers = () => {
     const dispatch = useDispatch()
     const users = useAppSelector((state) => state.users.users)
     const selectedEditingUserId = useAppSelector((state) => state.users.editingUserId)
-    console.log('selectEditingUser: ', selectedEditingUserId)
 
     const [selectedDepartment, setSelectedDepartment] = useState<Option | null>(null)
     const [selectedCountry, setSelectedCountry] = useState<Option | null>(null)
     const [selectedStatus, setSelectedStatus] = useState<Option | null>(null)
-
 
     const onSelectEditingUser = (option: Option | null) => {
         if (!option) return
@@ -57,7 +54,7 @@ const EditUsers = () => {
                             options={users.map((user) => ({ label: user.fullName, value: user }))}
                             className="react-select-container"
                             classNamePrefix={css.reactSelect}
-                            styles={createSelectStyles()}
+                            styles={newStyles}
                         />
                     </label>
                     <h2 className={css.userInformationTitle}>User Information</h2>
@@ -77,7 +74,7 @@ const EditUsers = () => {
                                     options={departamentOptions}
                                     className="react-select-container"
                                     classNamePrefix={css.reactSelect}
-                                    styles={createSelectStyles()}
+                                    styles={newStyles}
                                 />
                             </label>
                         </div>
@@ -90,7 +87,7 @@ const EditUsers = () => {
                                     options={countryOptions}
                                     className="react-select-container"
                                     classNamePrefix={css.reactSelect}
-                                    styles={createSelectStyles()}
+                                    styles={newStyles}
                                 />
                             </label>
 
@@ -102,7 +99,7 @@ const EditUsers = () => {
                                     options={statusOptions}
                                     className="react-select-container"
                                     classNamePrefix={css.reactSelect}
-                                    styles={createSelectStyles()}
+                                    styles={newStyles}
                                 />
                             </label>
                         </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import {useState } from 'react'
 import css from './Users.module.css'
 import DeleteIcon from '../../assets/images/deleteIcon.svg?react'
 // import DeleteIcon from "@mui/icons-material/Delete";
@@ -6,37 +6,37 @@ import Select from 'react-select'
 import { IconButton } from '@mui/material'
 import { TableVirtuoso } from 'react-virtuoso'
 import Modal from 'react-modal'
-import { User } from '../../types/user'
 import AddUserModal from '../../components/AddUserModal/AddUserModal'
 import { useSearchParams } from 'react-router-dom'
 import { countryOptions, departamentOptions, statusOptions } from '../../utils/options'
 import { useDispatch, useSelector } from 'react-redux'
 import { addUser, deleteUser } from '../../redux/Users/usersReducer'
+import AnimatedText from '../../components/AnimatedText/AnimatedText'
 
-const INITIAL_DATA = [
-    {
-        id: 1,
-        fullName: 'John Doe',
-        departament: 'Digital Marketing',
-        country: 'Ukraine',
-        status: 'Inactive',
-    },
-    {
-        id: 2,
-        fullName: 'Alla Doe',
-        departament: 'Sales',
-        country: 'Poland',
-        status: 'Active',
-    },
-    {
-        id: 3,
-        fullName: 'Sophia Doe',
-        departament: 'Development',
-        country: 'USA',
-        status: 'Active',
-    },
-    // Більше даних...
-]
+// const INITIAL_DATA = [
+//     {
+//         id: 1,
+//         fullName: 'John Doe',
+//         departament: 'Digital Marketing',
+//         country: 'Ukraine',
+//         status: 'Inactive',
+//     },
+//     {
+//         id: 2,
+//         fullName: 'Alla Doe',
+//         departament: 'Sales',
+//         country: 'Poland',
+//         status: 'Active',
+//     },
+//     {
+//         id: 3,
+//         fullName: 'Sophia Doe',
+//         departament: 'Development',
+//         country: 'USA',
+//         status: 'Active',
+//     },
+//     // Більше даних...
+// ]
 
 Modal.setAppElement('#root')
 
@@ -157,6 +157,7 @@ const Users = () => {
     return (
         <div className={css.container}>
             <div className={css.wrap}>
+                <AnimatedText/>
                 <h1 className={css.usersTitle}>USERS</h1>
                 <p className={css.paragraph}>Please add at least 3 departmetns to be able to proceed next steps.</p>
                 <div className={css.wrapper}>
@@ -252,10 +253,10 @@ const Users = () => {
                     )}
                     fixedHeaderContent={() => (
                         <tr>
-                            <th>Full Name</th>
-                            <th>departament</th>
-                            <th>Country</th>
-                            <th>Status</th>
+                            <th className={css.th}>Full Name</th>
+                            <th className={css.th}>departament</th>
+                            <th className={css.th}>Country</th>
+                            <th className={css.th}>Status</th>
                         </tr>
                     )}
                 />
