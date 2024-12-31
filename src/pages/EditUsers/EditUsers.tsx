@@ -28,14 +28,15 @@ const EditUsers = () => {
     const [selectedCountry, setSelectedCountry] = useState<Option | null>(null)
     const [selectedStatus, setSelectedStatus] = useState<Option | null>(null)
 
-
     const onSelectEditingUser = (option: Option | null) => {
         if (!option) return
         const user = option.value as any
         dispatch(selectEditingUser(user.id))
     }
 
+    const selectedUser = users.find((user) => user.id === selectedEditingUserId)
     
+
     useEffect(() => {
         const selectedUser = users.find((user) => user.id === selectedEditingUserId)
         const departmentOption = departamentOptions.find((opt) => opt.value === selectedUser?.departament) || null
@@ -49,7 +50,7 @@ const EditUsers = () => {
         // setSelectedDepartment(selectedUser?.departament)
         // setSelectedCountry(selectedUser?.country)
         // setSelectedStatus(selectedUser?.status)
-    }, [selectedEditingUserId, selectedDepartment, selectedCountry, selectedStatus,])
+    }, [selectedEditingUserId, selectedDepartment, selectedCountry, selectedStatus])
 
     const onUpdateUser = () => {}
     return (
@@ -78,7 +79,12 @@ const EditUsers = () => {
                         <div className={css.formGroup}>
                             <label>
                                 <span className={css.span}>Full Name</span>
-                                <Field className={css.userInput} type="text" name="fullName" placeholder="" />
+                                <Field
+                                    className={css.userInput}
+                                    type="text"
+                                    name={selectedUser ? selectedUser.fullName : 'fullName'}
+                                    placeholder=""
+                                />
                             </label>
 
                             <label>
