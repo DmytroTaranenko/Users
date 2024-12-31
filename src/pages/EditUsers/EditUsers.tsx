@@ -2,9 +2,9 @@ import { Field, Form, Formik } from 'formik'
 import css from './EditUsers.module.css'
 import * as Yup from 'yup'
 import { countryOptions, departamentOptions, Option, statusOptions } from '../../utils/options'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Select from 'react-select'
-import { createSelectStyles, newStyles } from '../../utils/selectStyles'
+import { newStyles } from '../../utils/selectStyles'
 import { useDispatch } from 'react-redux'
 import { selectEditingUser } from '../../redux/Users/usersReducer'
 import { useAppSelector } from '../../hooks'
@@ -28,15 +28,30 @@ const EditUsers = () => {
     const [selectedCountry, setSelectedCountry] = useState<Option | null>(null)
     const [selectedStatus, setSelectedStatus] = useState<Option | null>(null)
 
+
     const onSelectEditingUser = (option: Option | null) => {
         if (!option) return
         const user = option.value as any
-        console.log(user)
         dispatch(selectEditingUser(user.id))
     }
 
-    const onUpdateUser = () => {}
+    
+    useEffect(() => {
+        const selectedUser = users.find((user) => user.id === selectedEditingUserId)
+        const departmentOption = departamentOptions.find((opt) => opt.value === selectedUser?.departament) || null
+        setSelectedDepartment(departmentOption)
 
+        const countryOption = countryOptions.find((opt) => opt.value === selectedUser?.country) || null
+        setSelectedCountry(countryOption)
+
+        const statusOption = statusOptions.find((opt) => opt.value === selectedUser?.status) || null
+        setSelectedStatus(statusOption)
+        // setSelectedDepartment(selectedUser?.departament)
+        // setSelectedCountry(selectedUser?.country)
+        // setSelectedStatus(selectedUser?.status)
+    }, [selectedEditingUserId, selectedDepartment, selectedCountry, selectedStatus,])
+
+    const onUpdateUser = () => {}
     return (
         <div className={css.container}>
             <Formik

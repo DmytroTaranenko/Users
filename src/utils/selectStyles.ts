@@ -122,15 +122,15 @@ export const newStyles = createSelectStyles({
     }),
     menuList: (base) => ({
         ...base,
-        maxHeight: '200px', 
-        overflowY: 'auto', 
+        maxHeight: '200px',
+        overflowY: 'auto',
     }),
     control: (base: any) => ({
         ...base,
         border: '1px solid #e3e8ee',
         width: '500px',
         height: '48px',
-        overflowY: "auto",
+        overflowY: 'auto',
         boxShadow: 'none',
         transition: 'all .3s',
         '&:hover': {
@@ -157,6 +157,24 @@ export const newStyles = createSelectStyles({
         fontWeight: 500,
         color: isSelected ? '#f44242' : '#15171a',
         backgroundColor: isSelected ? 'transparent' : 'transparent',
+    }),
+    singleValue: (base: any) => ({
+        ...base,
+        color: '#15171a',
+        fontSize: 14,
+        paddingLeft: 15,
+        fontWeight: 600,
+    }),
+    indicatorSeparator: (base: any) => ({
+        ...base,
+        display: 'none',
+    }),
+    input: (base: any) => ({
+        ...base,
+        color: '#15171a',
+        // paddingLeft: 15,
+        fontSize: 14,
+        paddingLeft: 15,
     }),
 })
 
